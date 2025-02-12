@@ -1,0 +1,41 @@
+﻿@model Reservations.Models.Hotel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>List of Rooms available for renting at</h1>
+<h4>"@Html.DisplayFor(model => model.Name)"</h4>
+<br />
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Room Number</th>
+            <th>Size</th>
+            <th>Price per Night</th>
+            <th>Availability</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var room in Model.Rooms)
+        {
+            <tr>
+                <td>@room.RoomNumber</td>
+                <td>@room.Size</td>
+                <td>@room.PricePerNight</td>
+                <td>@room.Available ? "Available" : "Not Available"</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

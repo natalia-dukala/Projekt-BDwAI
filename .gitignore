@@ -1,0 +1,16 @@
+# Foldery bin i obj (kompilowane pliki)
+bin/
+obj/
+
+# Konfiguracje użytkownika
+*.user
+*.suo
+.vs/
+
+# Foldery zależności pakietów NuGet
+packages/
+node_modules/
+
+# Pliki logów i tymczasowe
+*.log
+*.tmp
