@@ -17,7 +17,7 @@ namespace Reservations.Controllers
         // GET: HotelController
         public ActionResult Index()
         {
-            var hotels = _context.Hotels.Include(h => h.Category).ToList();
+            var hotels = _context.Hotels.Include(h => h.Category).Include(h => h.Rooms).ToList();
             return View(hotels);
         }
 
@@ -51,6 +51,7 @@ namespace Reservations.Controllers
             catch
             {
                 ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "Name", hotel.CategoryId);
+                
                 return View(hotel);
             }
         }
@@ -59,8 +60,8 @@ namespace Reservations.Controllers
         public ActionResult Edit(int id)
         {
             var hotel = _context.Hotels.Find(id);
-
             ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "Name");
+
             return View(hotel);
         }
 
@@ -79,6 +80,7 @@ namespace Reservations.Controllers
             catch
             {
                 ViewBag.CategoryId = new SelectList(_context.Categories, "Id", "Name", hotel.CategoryId);
+                
                 return View(hotel);
             }
         }

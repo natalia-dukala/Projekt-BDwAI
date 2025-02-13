@@ -4,12 +4,11 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>List of Rooms available for renting at</h1>
-<h4>"@Html.DisplayFor(model => model.Name)"</h4>
+<h1>List of Rooms available for renting at @Model.Name</h1>
 <br />
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-controller="Room" asp-action="Create" asp-route-hotelId="@Model.Id">Create New Room</a>
 </p>
 
 <table class="table">
@@ -19,6 +18,7 @@
             <th>Size</th>
             <th>Price per Night</th>
             <th>Availability</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -27,8 +27,23 @@
             <tr>
                 <td>@room.RoomNumber</td>
                 <td>@room.Size</td>
-                <td>@room.PricePerNight</td>
-                <td>@room.Available ? "Available" : "Not Available"</td>
+                <td>@room.PricePerNight $</td>
+                <td>
+                    @if (room.Available == true)
+                    {
+                        <span class="text-success">&#10004;</span>
+                    }
+                    else
+                    {
+                        <span class="text-danger">&#10008;</span>
+                    }
+                </td>
+                <td>
+                    <div class="btn-group" role="group">
+                        @Html.ActionLink("Edit", "Edit", "Room", new { id = room.Id }, new { @class = "btn btn-primary btn-sm mr-2" })
+                        @Html.ActionLink("Delete", "Delete", "Room", new { id = room.Id }, new { @class = "btn btn-danger btn-sm" })
+                    </div>
+                </td>
             </tr>
         }
     </tbody>

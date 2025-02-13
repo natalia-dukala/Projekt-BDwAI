@@ -1,4 +1,4 @@
-﻿@model Reservations.Models.Hotel
+﻿@model Reservations.Models.Room
 
 @{
     ViewData["Title"] = "Delete";
@@ -8,11 +8,11 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <form asp-action="Delete">
+    <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="Id" />
         <div class="btn-group" role="group">
             <input type="submit" value="Delete" class="btn btn-danger btn-sm" />
-            <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+            <a asp-controller="Hotel" asp-action="Details" asp-route-id="@Model.HotelId" class="btn btn-secondary btn-sm">Back to List</a>
         </div>
     </form>
 </div>
