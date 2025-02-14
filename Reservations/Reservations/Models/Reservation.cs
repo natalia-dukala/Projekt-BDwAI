@@ -12,17 +12,20 @@ namespace Reservations.Models
         public int RoomId { get; set; }
         public virtual Room Room { get; set; }
 
-        // dodać później
-        //[Column(TypeName = "nvarchar(100)")]
-        //public string FirstName { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
+        public string FirstName { get; set; }
 
-        //[Column(TypeName = "nvarchar(100)")]
-        //public string LastName { get; set; }
+        [Column(TypeName = "nvarchar(100)")]
+        public string LastName { get; set; }
 
         [Column(TypeName = "date")]
         public DateTime CheckInDate { get; set; }
 
         [Column(TypeName = "date")]
         public DateTime CheckOutDate { get; set; }
+
+        [ForeignKey("DefaultUser")]
+        public string UserId { get; set; }
+        public virtual DefaultUser User { get; set; }
     }
 }

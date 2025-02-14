@@ -24,10 +24,20 @@ namespace Reservations.Controllers
         // GET: HotelController/Details/5
         public ActionResult Details(int id)
         {
-            var hotel = _context.Hotels.Include(h => h.Category).Include(h => h.Rooms).FirstOrDefault(h => h.Id == id);
+            var hotel = _context.Hotels
+                .Include(h => h.Category)
+                .Include(h => h.Rooms)
+                .FirstOrDefault(h => h.Id == id);
 
+            if (hotel == null)
+            {
+                return NotFound(); // Zwracamy stronę 404, jeśli hotel nie istnieje
+            }
+
+            ViewBag.HotelId = hotel.Id;
             return View(hotel);
         }
+
 
         // GET: HotelController/Create
         public ActionResult Create()
