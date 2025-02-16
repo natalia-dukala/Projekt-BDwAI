@@ -24,17 +24,17 @@ namespace Reservations.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<DefaultUser> _signInManager;
-        private readonly UserManager<DefaultUser> _userManager;
-        private readonly IUserStore<DefaultUser> _userStore;
-        private readonly IUserEmailStore<DefaultUser> _emailStore;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly IUserStore<User> _userStore;
+        private readonly IUserEmailStore<User> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
-            UserManager<DefaultUser> userManager,
-            IUserStore<DefaultUser> userStore,
-            SignInManager<DefaultUser> signInManager,
+            UserManager<User> userManager,
+            IUserStore<User> userStore,
+            SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -71,14 +71,16 @@ namespace Reservations.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+            // FirstName value
             [Required]
-            [DataType(DataType.Text)]
-            [Display(Name = "First Name")]
+            [Display(Name ="First Name")]
+            [StringLength(100, ErrorMessage = "Max 100!")]
             public string FirstName { get; set; }
 
+            // LastName value
             [Required]
-            [DataType(DataType.Text)]
             [Display(Name = "Last Name")]
+            [StringLength(100, ErrorMessage = "Max 100!")]
             public string LastName { get; set; }
 
             /// <summary>
@@ -124,8 +126,11 @@ namespace Reservations.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
+                user.EmailConfirmed = true;
+
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -134,6 +139,7 @@ namespace Reservations.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    await _userManager.AddToRoleAsync(user, "User");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -167,27 +173,27 @@ namespace Reservations.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private DefaultUser CreateUser()
+        private User CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<DefaultUser>();
+                return Activator.CreateInstance<User>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(DefaultUser)}'. " +
-                    $"Ensure that '{nameof(DefaultUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(User)}'. " +
+                    $"Ensure that '{nameof(User)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<DefaultUser> GetEmailStore()
+        private IUserEmailStore<User> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<DefaultUser>)_userStore;
+            return (IUserEmailStore<User>)_userStore;
         }
     }
 }

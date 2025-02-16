@@ -1,63 +1,82 @@
-﻿@model Reservations.Models.Hotel
+﻿@using Microsoft.AspNetCore.Identity
+@using Reservations.Controllers
+
+@inject UserManager<User> UserManager
+@inject ReservationsDbContext _context
+
+@model Reservations.Models.Hotel
 
 @{
-    ViewData["Title"] = "Details";
+    var userId = UserManager.GetUserId(User);
+    var userReservations = _context.Reservations.Where(r => r.UserId == userId).ToList();
 }
 
-<h1>List of Rooms available for renting at @Model.Name</h1>
-<br />
+<h2><strong>@Model.Name</strong></h2>
+@* <p>Hotel ID: @Model.Id</p> *@
+<h3>Rooms</h3>
 
-<p>
-    <a asp-controller="Room" asp-action="Create" asp-route-hotelId="@Model.Id">Create New Room</a>
-</p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Room Number</th>
-            <th>Size</th>
-            <th>Price per Night</th>
-            <th>Availability</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var room in Model.Rooms)
-        {
-            <tr>
-                <td>@room.RoomNumber</td>
-                <td>@room.Size</td>
-                <td>@room.PricePerNight $</td>
-                <td>
-                    @if (room.Available == true)
-                    {
-                        <span class="text-success">&#10004;</span>
-                    }
-                    else
-                    {
-                        <span class="text-danger">&#10008;</span>
-                    }
-                </td>
-                <td>
-                    <div class="btn-group" role="group">
-                        @Html.ActionLink("Edit", "Edit", "Room", new { id = room.Id }, new { @class = "btn btn-primary btn-sm mr-2" })
-                        @Html.ActionLink("Delete", "Delete", "Room", new { id = room.Id }, new { @class = "btn btn-danger btn-sm" })
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<br />
-
-@if (Model.Rooms.Any(r => r.Available))
+@if (User.IsInRole("Admin"))
+{<p>
+    <a asp-controller="Room" asp-action="Create" asp-route-hotelId="@Model.Id">Create New</a>
+</p>}
+@if (Model.Rooms.Any())
 {
-    <div class="btn-group" role="group">
-        <a asp-action="Create" asp-controller="Reservation" asp-route-hotelId="@Model.Id" class="btn btn-success btn-sm">Make Reservation</a>
-    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Room Number</th>
+                <th>Type</th>
+                <th>Available</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var room in Model.Rooms)
+            {
+                var reservation = userReservations.FirstOrDefault(r => r.RoomId == room.Id);
+                <tr>
+                    <td>@room.RoomNumber</td>
+                    <td>@room.Size</td>
+                    <td>
+                        @if (room.IsRented)
+                        {
+                            <span style="color: red;">✖</span>
+                        }
+                        else
+                        {
+                            <span style="color: green;">✔</span>
+                        }
+                    </td>
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {<a asp-controller="Room" asp-action="Edit" asp-route-id="@room.Id">Edit</a> <span> |</span>}
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Room" asp-action="Delete" asp-route-id="@room.Id">Delete</a>
+
+                            <span> |</span>
+                        }
+                        @if (!room.IsRented)
+                        {
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("User"))
+                            {
+                                
+                                <a asp-controller="Reservation" asp-action="Create" asp-route-roomId="@room.Id">Make reservation</a>
+                            }
+                        }
+                        @if (room.IsRented && reservation != null)
+                        {
+                            <a asp-controller="Reservation" asp-action="Delete" asp-route-roomId="@room.Id">Check-out</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No rooms available in this hotel.</p>
 }
 
-<div class="btn-group" role="group">
-    <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
-</div>
+<a asp-action="Index">Back to List</a>

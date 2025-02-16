@@ -8,10 +8,6 @@ namespace Reservations.Models
         [Key]
         public int Id { get; set; }
 
-        [ForeignKey("Room")]
-        public int RoomId { get; set; }
-        public virtual Room Room { get; set; }
-
         [Column(TypeName = "nvarchar(100)")]
         public string FirstName { get; set; }
 
@@ -23,9 +19,17 @@ namespace Reservations.Models
 
         [Column(TypeName = "date")]
         public DateTime CheckOutDate { get; set; }
+        
+        // FK - Room
+        [ForeignKey("Room")]
+        public int RoomId { get; set; }
+        // FK - Room nav
+        public virtual Room Room { get; set; }
 
-        [ForeignKey("DefaultUser")]
+        // FK - User
+        [ForeignKey("User")]
         public string UserId { get; set; }
-        public virtual DefaultUser User { get; set; }
+        // FK - User nav
+        public User User { get; set; }
     }
 }

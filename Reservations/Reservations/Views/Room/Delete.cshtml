@@ -8,11 +8,39 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <form asp-action="Delete" method="post">
+    <h4>Room</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RoomNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RoomNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Size)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Size)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IsRented)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsRented)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Hotel)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Hotel.Id)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <div class="btn-group" role="group">
-            <input type="submit" value="Delete" class="btn btn-danger btn-sm" />
-            <a asp-controller="Hotel" asp-action="Details" asp-route-id="@Model.HotelId" class="btn btn-secondary btn-sm">Back to List</a>
-        </div>
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Details" asp-controller="Hotel" asp-route-id="@Model.HotelId">Back to List of Rooms</a>
+
     </form>
 </div>

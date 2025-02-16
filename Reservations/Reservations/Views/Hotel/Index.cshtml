@@ -4,17 +4,15 @@
     ViewData["Title"] = "Index";
 }
 
-<h1></h1>
+<h1>Index</h1>
 
-<p>
+@if (User.IsInRole("Admin"))
+{<p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>}
 <table class="table">
     <thead>
         <tr>
-            @* <th> *@
-            @*     @Html.DisplayNameFor(model => model.Id) *@
-            @* </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -28,13 +26,7 @@
                 @Html.DisplayNameFor(model => model.Country)
             </th>
             <th>
-                Type of Hotel
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rating)
-            </th>
-            <th>
-                Vacancy
+                @Html.DisplayNameFor(model => model.Category)
             </th>
             <th></th>
         </tr>
@@ -42,9 +34,6 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            @* <td> *@
-            @*     @Html.DisplayFor(modelItem => item.Id) *@
-            @* </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -61,26 +50,18 @@
                 @Html.DisplayFor(modelItem => item.Category.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Rating)
-            </td>
-            <td>
-                @if (item.Rooms.Any(r => r.Available))
+                @if (User.IsInRole("Admin"))
                 {
-                    <span class="text-success">&#10004;</span>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                    <span> |</span>
                 }
-                else
+                <a asp-action="Details" asp-route-id="@item.Id">Rooms</a>
+                @if (User.IsInRole("Admin"))
                 {
-                    <span class="text-danger">&#10008;</span>
+                <span>| </span>
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 }
             </td>
-            <td class="text-center">
-                <div class="btn-group" role="group">
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-primary btn-sm mr-2" })
-                    @Html.ActionLink("Rooms", "Details", new { id = item.Id }, new { @class = "btn btn-info btn-sm mr-2" })
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })
-                </div>
-            </td>
-
         </tr>
 }
     </tbody>

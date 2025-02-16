@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Reservations.Models;
 
 namespace Reservations.Controllers
@@ -14,81 +13,50 @@ namespace Reservations.Controllers
             _context = context;
         }
 
-        // NIEPOTRZEBNE
-        // GET: RoomController
-        public ActionResult Index(int hotelId)
-        {
-            var rooms = _context.Rooms.Where(r => r.HotelId == hotelId).Include(r => r.Hotel).ToList();
-            return View(rooms);
-        }
-
-        // GET: RoomController/Details/5
-        public ActionResult Details(int id)
-        {
-            var room = _context.Rooms.Include(r => r.Hotel).FirstOrDefault(r => r.Id == id);
-
-            return View();
-        }
-
         // GET: RoomController/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create(int hotelId)
         {
-            var room = new Room { HotelId = hotelId, Available = true };
+            var room = new Room { HotelId = hotelId, IsRented = false };
 
             return View(room);
         }
 
         // POST: RoomController/Create
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Room room)
         {
-            if (!room.Available)
-            {
-                room.Available = true;
-            }
+            _context.Rooms.Add(room);
+            _context.SaveChanges();
 
-            try
-            {
-                _context.Rooms.Add(room);
-                _context.SaveChanges();
-
-                return RedirectToAction("Details", "Hotel", new { id = room.HotelId });
-            }
-            catch
-            {
-                return View(room);
-            }
+            return RedirectToAction("Details", "Hotel", new { id = room.HotelId });
         }
 
         // GET: RoomController/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int id)
         {
             var room = _context.Rooms.Find(id);
-            ViewBag.Room = room;
 
             return View(room);
         }
 
         // POST: RoomController/Edit/5
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Room room)
         {
-            try
-            {
-                _context.Rooms.Update(room);
-                _context.SaveChanges();
+            _context.Rooms.Update(room);
+            _context.SaveChanges();
 
-                return RedirectToAction("Details", "Hotel", new { id = room.HotelId });
-            }
-            catch
-            {
-                return View(room);
-            }
+            return RedirectToAction("Details", "Hotel", new { id = room.HotelId });
         }
 
         // GET: RoomController/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
             var room = _context.Rooms.Find(id);
@@ -97,22 +65,17 @@ namespace Reservations.Controllers
         }
 
         // POST: RoomController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteConfirmed(int id)
         {
             var room = _context.Rooms.Find(id);
-            try
-            {
-                _context.Rooms.Remove(room);
-                _context.SaveChanges();
 
-                return RedirectToAction("Details", "Hotel", new { id = room.HotelId });
-            }
-            catch
-            {
-                return View(room);
-            }
+            _context.Rooms.Remove(room);
+            _context.SaveChanges();
+
+            return RedirectToAction("Details", "Hotel", new { id = room.HotelId });
         }
     }
 }

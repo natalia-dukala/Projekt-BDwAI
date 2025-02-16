@@ -12,9 +12,7 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <input type="hidden" asp-for="HotelId" />
-            </div>
+            <input type="hidden" asp-for="HotelId" />
             <div class="form-group">
                 <label asp-for="RoomNumber" class="control-label"></label>
                 <input asp-for="RoomNumber" class="form-control" />
@@ -26,17 +24,15 @@
                 <span asp-validation-for="Size" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PricePerNight" class="control-label"></label>
-                <input asp-for="PricePerNight" class="form-control" />
-                <span asp-validation-for="PricePerNight" class="text-danger"></span>
-            </div>
-            <br />
-            <div class="btn-group" role="group">
-                <input type="submit" value="Create" class="btn btn-primary btn-sm" />
-                <a asp-controller="Hotel" asp-action="Details" asp-route-id="@Model.HotelId" class="btn btn-secondary btn-sm">Back to List</a>
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
+</div>
+
+<div>
+    <a asp-action="Details" asp-controller="Hotel" asp-route-id="@Model.HotelId">Back to List of Rooms</a>
+
 </div>
 
 @section Scripts {

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Reservations.Models;
 
 namespace Reservations.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
         private readonly ReservationsDbContext _context;
@@ -16,14 +18,8 @@ namespace Reservations.Controllers
         public ActionResult Index()
         {
             var categories = _context.Categories.ToList();
-            
-            return View(categories);
-        }
 
-        // GET: CategoryController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
+            return View(categories);
         }
 
         // GET: CategoryController/Create
@@ -32,22 +28,14 @@ namespace Reservations.Controllers
             return View();
         }
 
-        // POST: CategoryController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Category category)
+        public IActionResult Create(Category category)
         {
-            try
-            {
-                _context.Categories.Add(category);
-                _context.SaveChanges();
+            _context.Categories.Add(category);
+            _context.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View(category);
-            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: CategoryController/Edit/5
@@ -63,17 +51,10 @@ namespace Reservations.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Category category)
         {
-            try
-            {
-                _context.Categories.Update(category);
-                _context.SaveChanges();
+            _context.Update(category);
+            _context.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View(category);
-            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: CategoryController/Delete/5
@@ -90,17 +71,10 @@ namespace Reservations.Controllers
         public ActionResult Delete(int id, IFormCollection collection)
         {
             var category = _context.Categories.Find(id);
-            try
-            {
-                _context.Categories.Remove(category);
-                _context.SaveChanges();
+            _context.Categories.Remove(category);
+            _context.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View(category);
-            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

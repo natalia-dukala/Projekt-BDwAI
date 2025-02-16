@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Reservations.Models.Reservation>
+
+@{
+    ViewData["Title"] = "My Reservations";
+    var currentUserEmail = User.Identity.Name;
+    var isAdmin = User.IsInRole("Admin");
+}
+
+<h1>Your reservations</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+            <th>@Html.DisplayNameFor(model => model.LastName)</th>
+            <th>@Html.DisplayNameFor(model => model.CheckInDate)</th>
+            <th>@Html.DisplayNameFor(model => model.CheckOutDate)</th>
+            <th>Room Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Where(r => isAdmin || r.User.Email == currentUserEmail))
+        {
+            <tr>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+                <td>@item.CheckInDate.ToShortDateString()</td>
+                <td>@item.CheckOutDate.ToShortDateString()</td>
+                <td>@item.Room.RoomNumber</td>
+            </tr>
+        }
+    </tbody>
+</table>

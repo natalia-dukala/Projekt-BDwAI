@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Reservations.Models
 {
@@ -11,6 +11,7 @@ namespace Reservations.Models
         [Column(TypeName = "nvarchar(100)")]
         public string Name { get; set; }
 
-        public virtual ICollection<Hotel> Hotels { get; set; }
+        // Hotels - nav
+        public ICollection<Hotel> Hotels { get; set; }
     }
 }
