@@ -43,7 +43,7 @@ TEMAT: System rezerwacji hoteli
 
    &rarr;&nbsp;Użytkownik zalogowany:
    - Home oraz Privacy - defaultowe strony MVC
-   - Hotels - dostęp do listy hoteli (tak jak w przypadku niezalogowanego użytkowanika), do listy pokoi (Details) oraz możliwości wykonania rezerwacji konkretnego pokoju - przekierowanie do formularza
+   - Hotels - dostęp do listy hoteli (tak jak w przypadku niezalogowanego użytkowanika), do listy pokoi (Details); możliwość dokonania rezerwacji konkretnego pokoju - przekierowanie do formularza oraz anulowania rezerwacji (leśli taka została wykonana)
    - Your reservations - lista rezerwacji danego zalogowanego użytkownika
    - Przycisk Logout - wylogowuje użytkowanika
 
