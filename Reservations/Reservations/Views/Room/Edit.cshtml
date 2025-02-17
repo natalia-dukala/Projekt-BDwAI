@@ -23,11 +23,7 @@
                 <input asp-for="Size" class="form-control" />
                 <span asp-validation-for="Size" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsRented" /> @Html.DisplayNameFor(model => model.IsRented)
-                </label>
-            </div>
+            <input type="hidden" asp-for="IsRented" />
             <input type="hidden" asp-for="HotelId" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

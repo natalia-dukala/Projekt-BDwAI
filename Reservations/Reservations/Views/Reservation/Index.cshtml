@@ -5,8 +5,14 @@
     var currentUserEmail = User.Identity.Name;
     var isAdmin = User.IsInRole("Admin");
 }
-
-<h1>Your reservations</h1>
+@if (User.IsInRole("Admin"))
+{
+    <h1>All reservations</h1>
+}
+@if (User.IsInRole("User"))
+{
+    <h1>Your reservations</h1>
+}
 
 <table class="table">
     <thead>
