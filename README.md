@@ -17,32 +17,39 @@ TEMAT: System rezerwacji hoteli
 2) Konfiguracja połączenia z bazą danych:  
    &rarr;&nbsp;plik appsettings.json  
    "ConnectionStrings": {  
-     "DevConnection": "Server=NAZWA_SWOJEGO_SERWERA_SQL;Database=Reservations;Trusted_Connection=True;TrustServerCertificate=True;"  
+   "DevConnection": "Server=NAZWA_SWOJEGO_SERWERA_SQL;Database=Reservations;Trusted_Connection=True;TrustServerCertificate=True;"  
    }
 
-3) Aktualizacja bazy danych
+4) Aktualizacja bazy danych
    - add-migration "nazwa migarcji"
    - update-database
 
-3) Użytkownicy:  
+3) Użytkownicy:</br></br>
    &rarr;&nbsp;Administrator  
-       &nbsp;login: admin@example.com  
-       &nbsp;hasło: Admin123!  
+       &nbsp;&nbsp;login: admin@example.com  
+       &nbsp;&nbsp;hasło: Admin123!</br></br>
    &rarr;&nbsp;Zwykli użytkownicy  
-       &nbsp;Aby dodać zwykłych użytkowników należy użyć opcji "Register"  
-       &nbsp;Najlepiej dodać conajmniej dwóch, aby zobaczyć pełną funkcjonalność aplikacji
+      &nbsp;login: user@example.com  
+      &nbsp;hasło: User123!</br></br>
+      &nbsp;Do dodawania zwykłych użytkowników należy użyć opcji "Register".  
+      &nbsp;Najlepiej dodać jeszcze conajmniej jednego (poza powyższym seedowanym), aby zobaczyć pełną funkcjonalność aplikacji.
 
-4) Działanie aplikacji (dostęp do widoków):  
+5) Działanie aplikacji (dostęp do widoków):</br></br>
    &rarr;&nbsp;Użytkownik niezalogowany:
    - Home oraz Privacy - defaultowe strony MVC
-   - Hotels - dostęp do listy hoteli oraz listy pokoi w tych hotelach (Details)
+   - Hotels - dostęp do listy hoteli oraz listy pokoi w tych hotelach (Details); brak możliwości rezerwacji pokoju
    - Przycisk Regiter - przenosi do formularza rejestracyjnego
    - Przycisk Login - przenosi do formularza logowania
 
    &rarr;&nbsp;Użytkownik zalogowany:
    - Home oraz Privacy - defaultowe strony MVC
-   - Hotels - dostęp do listy hoteli (tak jak w przypadku niezalogowanego użytkowanika), do listy pokoi (Details) oraz możliwości wykonania rezerwacji konkretnego pokoju
+   - Hotels - dostęp do listy hoteli (tak jak w przypadku niezalogowanego użytkowanika), do listy pokoi (Details) oraz możliwości wykonania rezerwacji konkretnego pokoju - przekierowanie do formularza
    - Your reservations - lista rezerwacji danego zalogowanego użytkownika
    - Przycisk Logout - wylogowuje użytkowanika
+
    &rarr;&nbsp;Administrator:
-   - 
+   - Home oraz Privacy - defaultowe strony MVC
+   - Hotels - admin ma dostęp do listy hoteli, ich edycji, usuwania, details (lista pokoi - również możliwość edycji oraz usuwania, ale brak opcji rezerwacji); uprawnienia do dodawania nowych hoteli i pokoi - formularze
+   - All reservations - lista wszystkich wykonanych rezerwacji
+   - Categories - lista kategorii hoteli, możliwość edycji, usuwania, dodawania nowych kategorii (formularz)
+   - Przycisk Logout - wylogowuje admina
